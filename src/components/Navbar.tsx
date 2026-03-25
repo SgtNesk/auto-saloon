@@ -27,7 +27,7 @@ export default function Navbar({ isAdmin = false }: NavbarProps) {
       ) : (
         <div className="nav-tabs">
           <Link href="/" className={`nav-tab ${pathname === "/" ? "active" : ""}`}>🏠 Vetrina</Link>
-          <Link href="/admin/login" className="nav-tab">🔒 Area Rivenditore</Link>
+          <Link href="/rivenditore" className={`nav-tab ${pathname === "/rivenditore" ? "active" : ""}`}>🌅 Rivenditore</Link>
         </div>
       )}
       <span className="nav-badge">AutoMarket Pro</span>
