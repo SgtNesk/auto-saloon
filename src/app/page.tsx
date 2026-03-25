@@ -44,7 +44,11 @@ export default async function HomePage() {
                   className="car-img-wrap"
                   style={{ background: BG_COLORS[car.brand] ?? "linear-gradient(135deg, #1a1a1a, #222)" }}
                 >
-                  <span>{car.emoji}</span>
+                  {car.images.length > 0 ? (
+                    <img src={car.images[0]} alt={`${car.brand} ${car.model}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  ) : (
+                    <span>{car.emoji}</span>
+                  )}
                   <div className="car-badge">{car.year}</div>
                 </div>
                 <div className="car-body">

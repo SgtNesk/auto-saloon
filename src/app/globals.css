@@ -160,6 +160,32 @@ input, select, textarea { font-family: var(--font-body); }
 .login-sub { color: var(--muted); font-size: 14px; margin-bottom: 32px; }
 .error-msg { background: rgba(224,82,82,.1); border: 1px solid rgba(224,82,82,.3); color: var(--red); padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; }
 
+/* CAROUSEL */
+.carousel { display: flex; flex-direction: column; gap: 12px; }
+.carousel-viewport { position: relative; width: 100%; border-radius: 12px; overflow: hidden; background: var(--surface2); border: 1px solid var(--border); aspect-ratio: 16 / 10; }
+.carousel-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,.55); color: #fff; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .2s; backdrop-filter: blur(4px); }
+.carousel-btn:hover { background: rgba(0,0,0,.8); }
+.carousel-prev { left: 12px; }
+.carousel-next { right: 12px; }
+.carousel-dots { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; }
+.carousel-dot { width: 8px; height: 8px; border-radius: 50%; border: 1px solid rgba(255,255,255,.5); background: transparent; cursor: pointer; padding: 0; transition: all .2s; }
+.carousel-dot.active { background: var(--accent); border-color: var(--accent); width: 20px; border-radius: 4px; }
+.carousel-thumbs { display: flex; gap: 8px; overflow-x: auto; padding: 2px; }
+.carousel-thumb { flex: 0 0 64px; height: 48px; border-radius: 6px; overflow: hidden; border: 2px solid transparent; cursor: pointer; padding: 0; background: none; transition: border-color .2s; }
+.carousel-thumb.active { border-color: var(--accent); }
+.carousel-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* UPLOAD GRID */
+.upload-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+.upload-thumb { position: relative; width: 80px; height: 80px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+.upload-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.upload-remove { position: absolute; top: 2px; right: 2px; width: 20px; height: 20px; border-radius: 50%; background: rgba(0,0,0,.7); color: #fff; border: none; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .2s; }
+.upload-remove:hover { background: var(--red); }
+.upload-add { width: 80px; height: 80px; border-radius: 8px; border: 2px dashed var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; color: var(--muted); font-size: 22px; transition: all .2s; gap: 2px; }
+.upload-add span { font-size: 10px; }
+.upload-add:hover { border-color: var(--accent); color: var(--accent); }
+
 /* DEALER PAGE */
 .dealer-page {
   min-height: calc(100vh - 60px);

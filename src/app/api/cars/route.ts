@@ -21,6 +21,7 @@ export async function POST(req: Request) {
       status: body.status || "DISPONIBILE",
       description: body.description || null,
       emoji: body.emoji || "🚗",
+      images: Array.isArray(body.images) ? body.images : [],
     },
   });
   return NextResponse.json(car, { status: 201 });

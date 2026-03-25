@@ -23,6 +23,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
       ...(body.status !== undefined && { status: body.status }),
       ...(body.description !== undefined && { description: body.description || null }),
       ...(body.emoji !== undefined && { emoji: body.emoji }),
+      ...(body.images !== undefined && { images: Array.isArray(body.images) ? body.images : [] }),
     },
   });
   return NextResponse.json(car);

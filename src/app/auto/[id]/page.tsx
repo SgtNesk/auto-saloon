@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
+import ImageCarousel from "@/components/ImageCarousel";
 import { prisma } from "@/lib/db";
 
 function fmtPrice(n: number) {
@@ -19,9 +20,7 @@ export default async function CarDetailPage({ params }: { params: { id: string }
         <Link href="/" className="back-btn">← Torna alla vetrina</Link>
         <div className="detail-grid">
           <div>
-            <div className="detail-img" style={{ background: "linear-gradient(135deg, #1a2030, #111)" }}>
-              <span style={{ fontSize: 140 }}>{car.emoji}</span>
-            </div>
+            <ImageCarousel images={car.images} emoji={car.emoji} />
             <div style={{ marginTop: 24 }}>
               <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 2, color: "var(--muted)", marginBottom: 4 }}>{car.brand}</div>
               <h1 style={{ fontFamily: "var(--font-display)", fontSize: 44, letterSpacing: 1, marginBottom: 20 }}>{car.model}</h1>
