@@ -6,6 +6,7 @@ type Car = {
   id: number; brand: string; model: string; year: number; km: number;
   fuel: string; color: string | null; price: number; costAcquisto: number;
   status: "DISPONIBILE" | "RISERVATO" | "VENDUTO"; description: string | null; emoji: string;
+  images: string[];
 };
 
 type CarForm = {
@@ -20,6 +21,7 @@ type CarForm = {
   status: Car["status"];
   description: string;
   emoji: string;
+  images: string[];
 };
 
 const FUELS = ["Benzina", "Diesel", "Ibrido", "Elettrico", "GPL"];
@@ -30,7 +32,7 @@ function fmtPrice(n: number) {
   return n.toLocaleString("it-IT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
 }
 
-const empty: CarForm = { brand: "", model: "", year: new Date().getFullYear(), km: 0, fuel: "Benzina", color: "", price: 0, costAcquisto: 0, status: "DISPONIBILE", description: "", emoji: "🚗" };
+const empty: CarForm = { brand: "", model: "", year: new Date().getFullYear(), km: 0, fuel: "Benzina", color: "", price: 0, costAcquisto: 0, status: "DISPONIBILE", description: "", emoji: "🚗", images: [] };
 
 export default function GestionePage() {
   const [cars, setCars] = useState<Car[]>([]);
@@ -39,6 +41,7 @@ export default function GestionePage() {
   const [editCar, setEditCar] = useState<Car | null>(null);
   const [form, setForm] = useState<CarForm>(empty);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const fetchCars = useCallback(async () => {
     const res = await fetch("/api/cars");
@@ -53,7 +56,7 @@ export default function GestionePage() {
   function openNew() { setEditCar(null); setForm(empty); setShowModal(true); }
   function openEdit(car: Car) {
     setEditCar(car);
-    setForm({ brand: car.brand, model: car.model, year: car.year, km: car.km, fuel: car.fuel, color: car.color ?? "", price: car.price, costAcquisto: car.costAcquisto, status: car.status, description: car.description ?? "", emoji: car.emoji });
+    setForm({ brand: car.brand, model: car.model, year: car.year, km: car.km, fuel: car.fuel, color: car.color ?? "", price: car.price, costAcquisto: car.costAcquisto, status: car.status, description: car.description ?? "", emoji: car.emoji, images: car.images ?? [] });
     setShowModal(true);
   }
 
@@ -88,6 +91,29 @@ export default function GestionePage() {
   }
 
   function setF(k: string, v: unknown) { setForm(f => ({ ...f, [k]: v })); }
+
+  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (!files || !files.length) return;
+    const total = form.images.length + files.length;
+    if (total > 10) { alert("Massimo 10 foto per veicolo"); return; }
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      for (let i = 0; i < files.length; i++) fd.append("files", files[i]);
+      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      if (!res.ok) { const err = await res.json(); alert(err.error); return; }
+      const { urls } = await res.json();
+      setForm(f => ({ ...f, images: [...f.images, ...urls] }));
+    } finally {
+      setUploading(false);
+      e.target.value = "";
+    }
+  }
+
+  function removeImage(idx: number) {
+    setForm(f => ({ ...f, images: f.images.filter((_, i) => i !== idx) }));
+  }
 
   return (
     <>
@@ -208,6 +234,25 @@ export default function GestionePage() {
               <div className="form-group">
                 <label className="form-label">Colore</label>
                 <input className="form-input" placeholder="es. Nero Metallico" value={form.color} onChange={e => setF("color", e.target.value)} />
+              </div>
+              <div className="form-group full">
+                <label className="form-label">Foto ({form.images.length}/10)</label>
+                <div className="upload-grid">
+                  {form.images.map((url, i) => (
+                    <div key={i} className="upload-thumb">
+                      <img src={url} alt={`Foto ${i + 1}`} />
+                      <button type="button" className="upload-remove" onClick={() => removeImage(i)}>✕</button>
+                    </div>
+                  ))}
+                  {form.images.length < 10 && (
+                    <label className="upload-add">
+                      <input type="file" accept="image/jpeg,image/png,image/webp" multiple hidden onChange={handleUpload} disabled={uploading} />
+                      {uploading ? "⏳" : "＋"}
+                      <span>{uploading ? "Carico..." : "Aggiungi"}</span>
+                    </label>
+                  )}
+                </div>
+                {form.images.length < 4 && <p style={{ fontSize: 11, color: "var(--muted)", marginTop: 6 }}>Consigliato: almeno 4 foto</p>}
               </div>
               <div className="form-group full">
                 <label className="form-label">Descrizione</label>

@@ -20,6 +20,7 @@ model Car {
   status        CarStatus     @default(DISPONIBILE)
   description   String?
   emoji         String        @default("🚗")
+  images        String[]      @default([])
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   transactions  Transaction[]
