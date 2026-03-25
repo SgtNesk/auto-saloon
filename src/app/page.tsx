@@ -15,6 +15,7 @@ const BG_COLORS: Record<string, string> = {
 };
 
 export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const cars = await prisma.car.findMany({

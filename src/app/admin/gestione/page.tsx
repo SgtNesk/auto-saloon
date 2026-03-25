@@ -8,6 +8,20 @@ type Car = {
   status: "DISPONIBILE" | "RISERVATO" | "VENDUTO"; description: string | null; emoji: string;
 };
 
+type CarForm = {
+  brand: string;
+  model: string;
+  year: number;
+  km: number;
+  fuel: string;
+  color: string;
+  price: number;
+  costAcquisto: number;
+  status: Car["status"];
+  description: string;
+  emoji: string;
+};
+
 const FUELS = ["Benzina", "Diesel", "Ibrido", "Elettrico", "GPL"];
 const STATUSES = ["DISPONIBILE", "RISERVATO", "VENDUTO"] as const;
 const EMOJIS = ["🚗", "🚙", "🏎️", "🚘", "🚐", "🚑"];
@@ -16,14 +30,14 @@ function fmtPrice(n: number) {
   return n.toLocaleString("it-IT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
 }
 
-const empty = { brand: "", model: "", year: new Date().getFullYear(), km: 0, fuel: "Benzina", color: "", price: 0, costAcquisto: 0, status: "DISPONIBILE" as const, description: "", emoji: "🚗" };
+const empty: CarForm = { brand: "", model: "", year: new Date().getFullYear(), km: 0, fuel: "Benzina", color: "", price: 0, costAcquisto: 0, status: "DISPONIBILE", description: "", emoji: "🚗" };
 
 export default function GestionePage() {
   const [cars, setCars] = useState<Car[]>([]);
   const [filter, setFilter] = useState("TUTTI");
   const [showModal, setShowModal] = useState(false);
   const [editCar, setEditCar] = useState<Car | null>(null);
-  const [form, setForm] = useState(empty);
+  const [form, setForm] = useState<CarForm>(empty);
   const [loading, setLoading] = useState(false);
 
   const fetchCars = useCallback(async () => {
