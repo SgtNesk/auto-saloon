@@ -25,8 +25,8 @@ services:
       - "3000:3000"
     environment:
       DATABASE_URL: postgresql://automarket:${POSTGRES_PASSWORD:-changeme123}@db:5432/automarket
-      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
-      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-supersecret_change_in_prod}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?set ADMIN_PASSWORD in .env}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:?set NEXTAUTH_SECRET in .env}
       NODE_ENV: production
     depends_on:
       db:

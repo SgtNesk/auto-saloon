@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
+import { isAuthenticated } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  if (!isAuthenticated()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const [transactions, cars] = await Promise.all([
     prisma.transaction.findMany({ orderBy: { date: "desc" } }),
     prisma.car.findMany(),

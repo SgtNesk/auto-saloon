@@ -48,6 +48,7 @@ function LoginContent() {
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              autoComplete="off"
               autoFocus
             />
           </div>

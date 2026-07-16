@@ -9,7 +9,11 @@ export function middleware(request: NextRequest) {
   }
 
   const token = request.cookies.get("admin_token");
-  const secret = process.env.NEXTAUTH_SECRET ?? "supersecret_change_in_prod";
+  const secret = process.env.NEXTAUTH_SECRET;
+
+  if (!secret) {
+    return new NextResponse("Server auth is not configured", { status: 503 });
+  }
 
   if (!token || token.value !== secret) {
     const loginUrl = new URL("/admin/login", request.url);

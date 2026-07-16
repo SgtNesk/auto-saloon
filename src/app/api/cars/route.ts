@@ -1,12 +1,15 @@
 import { NextResponse } from "next/server";
+import { isAuthenticated } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
 export async function GET() {
+  if (!isAuthenticated()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const cars = await prisma.car.findMany({ orderBy: { createdAt: "desc" } });
   return NextResponse.json(cars);
 }
 
 export async function POST(req: Request) {
+  if (!isAuthenticated()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const body = await req.json();
   const car = await prisma.car.create({
     data: {
