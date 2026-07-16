@@ -47,7 +47,7 @@ npm run dev
 Apri [http://localhost:3000](http://localhost:3000)
 
 **Admin panel**: http://localhost:3000/admin  
-Password default: `admin123`
+Configura `ADMIN_PASSWORD` e `NEXTAUTH_SECRET` nel tuo `.env` prima di usare l'area admin.
 
 ---
 
@@ -70,7 +70,7 @@ nano .env  # <-- cambia TUTTE le password!
 ### 2. Genera un secret sicuro
 ```bash
 openssl rand -base64 32
-# Copia l'output in NEXTAUTH_SECRET nel .env
+# Copia l'output in NEXTAUTH_SECRET nel .env e imposta anche un ADMIN_PASSWORD forte
 ```
 
 ### 3. Avvia tutto

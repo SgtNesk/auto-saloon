@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
+import { isAuthenticated } from "@/lib/auth";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const MAX_FILES = 10;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
 export async function POST(req: Request) {
+  if (!isAuthenticated()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const formData = await req.formData();
   const files = formData.getAll("files") as File[];
 

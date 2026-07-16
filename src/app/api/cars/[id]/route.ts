@@ -1,13 +1,16 @@
 import { NextResponse } from "next/server";
+import { isAuthenticated } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
 export async function GET(_: Request, { params }: { params: { id: string } }) {
+  if (!isAuthenticated()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const car = await prisma.car.findUnique({ where: { id: parseInt(params.id) } });
   if (!car) return NextResponse.json({ error: "Not found" }, { status: 404 });
   return NextResponse.json(car);
 }
 
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
+  if (!isAuthenticated()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const body = await req.json();
   const car = await prisma.car.update({
     where: { id: parseInt(params.id) },
@@ -30,6 +33,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 }
 
 export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+  if (!isAuthenticated()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   await prisma.car.delete({ where: { id: parseInt(params.id) } });
   return NextResponse.json({ ok: true });
 }

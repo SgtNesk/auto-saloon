@@ -3,8 +3,15 @@ import { cookies } from "next/headers";
 
 export async function POST(req: Request) {
   const { password } = await req.json();
-  const adminPassword = process.env.ADMIN_PASSWORD ?? "admin123";
-  const secret = process.env.NEXTAUTH_SECRET ?? "supersecret_change_in_prod";
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  const secret = process.env.NEXTAUTH_SECRET;
+
+  if (!adminPassword || !secret) {
+    return NextResponse.json(
+      { error: "Server auth is not configured" },
+      { status: 500 },
+    );
+  }
 
   if (password !== adminPassword) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
